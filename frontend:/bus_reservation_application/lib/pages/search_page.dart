@@ -1,4 +1,5 @@
 import 'package:bus_reservation_application/utils/constants.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   String? fromCity;
   String? toCity;
-  DateTime? date;
+  DateTime? selectedDate;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,9 +87,39 @@ class _SearchPageState extends State<SearchPage> {
                     });
                   },
                 ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: selectDate,
+                      child: const Text('Select Date'),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      selectedDate == null
+                          ? 'Date is not selected'
+                          : formatDate(
+                              selectedDate!, ['dd', '-', 'MM', '-', 'yyyy']),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
         ));
+  }
+
+  void selectDate() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    ).then((value) {
+      setState(() {
+        selectedDate = value;
+      });
+    });
   }
 }
