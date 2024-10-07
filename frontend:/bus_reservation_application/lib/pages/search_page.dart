@@ -1,4 +1,6 @@
+import 'package:bus_reservation_application/datasource/temp_db.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
+import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final formKey = GlobalKey<FormState>();
   String? fromCity;
   String? toCity;
   DateTime? selectedDate;
@@ -24,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
           title: const Text('Search'),
         ),
         body: Form(
+          key: formKey,
           child: Center(
             child: ListView(
               padding: const EdgeInsets.all(8),
@@ -103,7 +107,14 @@ class _SearchPageState extends State<SearchPage> {
                               selectedDate!, ['dd', '-', 'MM', '-', 'yyyy']),
                     ),
                   ],
-                )
+                ),
+                const SizedBox(height: 10),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: search,
+                    child: const Text('Search'),
+                  ),
+                ),
               ],
             ),
           ),
@@ -121,5 +132,21 @@ class _SearchPageState extends State<SearchPage> {
         selectedDate = value;
       });
     });
+  }
+
+  void search() {
+    if (selectedDate == null) {
+      showMessage(context, selectDateErrMessage);
+      return;
+    }
+    if (formKey.currentState!.validate()) {
+      try {
+        final route = TempDB.tableRoute.firstWhere((element) =>
+            element.cityFrom == fromCity && element.cityTo == toCity);
+        showMessage(context, route.routeName);
+      } on StateError catch (e) {
+        showMessage(context, e.toString());
+      }
+    }
   }
 }
