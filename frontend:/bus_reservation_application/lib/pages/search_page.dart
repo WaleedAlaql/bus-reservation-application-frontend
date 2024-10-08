@@ -1,8 +1,9 @@
-import 'package:bus_reservation_application/datasource/temp_db.dart';
+import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -140,13 +141,14 @@ class _SearchPageState extends State<SearchPage> {
       return;
     }
     if (formKey.currentState!.validate()) {
-      try {
-        final route = TempDB.tableRoute.firstWhere((element) =>
-            element.cityFrom == fromCity && element.cityTo == toCity);
-        showMessage(context, route.routeName);
-      } on StateError catch (e) {
-        showMessage(context, e.toString());
-      }
+      Provider.of<AppDataProvider>(context, listen: false)
+          .getRouteByCityFromAndCityTo(fromCity!, toCity!)
+          .then((value) {
+        Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [
+          value,
+          formatDate(selectedDate!, ['dd', '-', 'MM', '-', 'yyyy'])
+        ]);
+      });
     }
   }
 }
