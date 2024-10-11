@@ -20,4 +20,6 @@ class BusSchedule {
       this.processingFee = 50});
 
   get routeName => null;
+
+  get id => scheduleId;
 }

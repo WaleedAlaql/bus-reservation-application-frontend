@@ -1,6 +1,7 @@
 import 'package:bus_reservation_application/pages/search_page.dart';
 import 'package:bus_reservation_application/pages/search_result_page.dart';
 import 'package:bus_reservation_application/pages/seat_selection_page.dart';
+import 'package:bus_reservation_application/pages/booking_confirmation_page.dart';
 import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: routeNameHome,
+      initialRoute: routeNameBookingConfirmationPage,
       routes: {
         routeNameHome: (context) => const SearchPage(),
         routeNameSearchResultPage: (context) => const SearchResultPage(),
         routeNameSeatSelectionPage: (context) => const SeatSelectionPage(),
+        routeNameBookingConfirmationPage: (context) =>
+            const BookingConfirmationPage(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

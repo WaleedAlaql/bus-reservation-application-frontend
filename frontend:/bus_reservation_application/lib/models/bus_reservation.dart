@@ -1,4 +1,3 @@
-
 import 'bus_schedule.dart';
 import 'customer.dart';
 
@@ -24,4 +23,6 @@ class BusReservation {
     required this.reservationStatus,
     required this.totalPrice,
   });
+
+  get scheduleId => null;
 }
