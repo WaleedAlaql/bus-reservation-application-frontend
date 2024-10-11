@@ -7,3 +7,9 @@ void showMessage(BuildContext context, String message) {
     ),
   );
 }
+
+int getGrandTotal(int discount, int totalSeatBooked, int price, int fee) {
+  final subTotal = (totalSeatBooked * price);
+  final priceAfterDiscount = subTotal - ((subTotal * discount) / 100);
+  return (priceAfterDiscount + fee).toInt();
+}
