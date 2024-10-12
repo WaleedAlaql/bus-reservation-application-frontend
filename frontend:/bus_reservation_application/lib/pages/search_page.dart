@@ -1,6 +1,7 @@
 import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/utils/helper_functions.dart';
+import 'package:bus_reservation_application/widgets/main_drawer.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +22,18 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.list, size: 30, color: Colors.white),
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
           ),
-          title: const Text('Search'),
         ),
+        drawer: const MainDrawer(),
         body: Form(
           key: formKey,
           child: Center(

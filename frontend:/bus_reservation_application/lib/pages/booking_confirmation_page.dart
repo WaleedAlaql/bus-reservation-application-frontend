@@ -1,10 +1,5 @@
-import 'package:bus_reservation_application/models/bus_reservation.dart';
-import 'package:bus_reservation_application/models/customer.dart';
-import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
-import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/bus_schedule.dart';
 
