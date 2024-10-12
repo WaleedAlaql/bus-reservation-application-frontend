@@ -7,6 +7,7 @@ import 'package:bus_reservation_application/models/bus_reservation.dart';
 import 'package:bus_reservation_application/models/bus_schedule.dart';
 import 'package:bus_reservation_application/models/but_route.dart';
 import 'package:bus_reservation_application/models/response_model.dart';
+import 'package:bus_reservation_application/utils/constants.dart';
 
 class DummyDataSource extends DataSource {
   @override
@@ -15,8 +16,14 @@ class DummyDataSource extends DataSource {
   }
 
   @override
-  Future<ResponseModel> addReservation(BusReservation reservation) {
-    throw UnimplementedError();
+  Future<ResponseModel> addReservation(BusReservation reservation) async {
+    TempDB.tableReservation.add(reservation);
+    return ResponseModel(
+      responseStatus: ResponseStatus.SAVED,
+      statusCode: 200,
+      message: 'Reservation added successfully',
+      object: {},
+    );
   }
 
   @override
@@ -72,7 +79,7 @@ class DummyDataSource extends DataSource {
       route = TempDB.tableRoute.firstWhere((element) =>
           element.cityFrom == cityFrom && element.cityTo == cityTo);
       return route;
-    } on StateError catch (error) {
+    } on StateError {
       return null;
     }
   }
@@ -84,7 +91,7 @@ class DummyDataSource extends DataSource {
 
   @override
   Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async {
-    return await TempDB.tableSchedule
+    return TempDB.tableSchedule
         .where((element) => element.routeName == routeName)
         .toList();
   }

@@ -1,5 +1,10 @@
+import 'package:bus_reservation_application/models/bus_reservation.dart';
+import 'package:bus_reservation_application/models/customer.dart';
+import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
+import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/bus_schedule.dart';
 
@@ -30,18 +35,18 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
     emailController.text = 'waleed@gmail.com';
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (isFirstTime) {
-      final args = ModalRoute.of(context)?.settings.arguments as List;
-      date = args[0];
-      busSchedule = args[1];
-      seatNumbers = args[2];
-      totalSeatsBooked = args[3];
-      isFirstTime = false;
-    }
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (isFirstTime) {
+  //     final args = ModalRoute.of(context)?.settings.arguments as List;
+  //     date = args[0];
+  //     busSchedule = args[1];
+  //     seatNumbers = args[2];
+  //     totalSeatsBooked = args[3];
+  //     isFirstTime = false;
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -198,7 +203,8 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
               ),
             ),
             ElevatedButton(
-                onPressed: () {}, child: const Text('Confirm Booking')),
+                onPressed: confirmBooking,
+                child: const Text('Confirm Booking')),
           ],
         ),
       ),
@@ -206,10 +212,41 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
   }
 
   void confirmBooking() {
-    if (formKey.currentState!.validate()) {
-      // Handle valid form
-    } else {
-      // Handle invalid form
-    }
+    // if (formKey.currentState!.validate()) {
+    //   // Handle valid form
+    //   final customer = Customer(
+    //     customerName: nameController.text,
+    //     mobile: phoneNumberController.text,
+    //     email: emailController.text,
+    //   );
+    //   final reservation = BusReservation(
+    //     customer: customer,
+    //     busSchedule: busSchedule,
+    //     timestamp: DateTime.now().millisecondsSinceEpoch,
+    //     departureDate: date,
+    //     totalSeatBooked: totalSeatsBooked,
+    //     seatNumbers: seatNumbers,
+    //     reservationStatus: reservationActive,
+    //     totalPrice: getGrandTotal(
+    //       busSchedule.discount,
+    //       totalSeatsBooked,
+    //       busSchedule.ticketPrice,
+    //       busSchedule.fee,
+    //     ),
+    //   );
+    //   Provider.of<AppDataProvider>(context, listen: false)
+    //       .addReservation(reservation)
+    //       .then((response) {
+    //     if (response.responseStatus == ResponseStatus.SAVED) {
+    Navigator.popUntil(context, ModalRoute.withName(routeNameHome));
+    //     } else {
+    //       showMessage(context, response.message);
+    //     }
+    //   }).catchError((error) {
+    //     showMessage(context, error.toString());
+    //   });
+    // } else {
+    //   // Handle invalid form
+    // }
   }
 }

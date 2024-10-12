@@ -22,4 +22,6 @@ class BusSchedule {
   get routeName => null;
 
   get id => scheduleId;
+
+  int get fee => processingFee;
 }
