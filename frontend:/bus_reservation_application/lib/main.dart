@@ -1,4 +1,5 @@
 import 'package:bus_reservation_application/pages/add_bus_page.dart';
+import 'package:bus_reservation_application/pages/add_route_page.dart';
 import 'package:bus_reservation_application/pages/search_page.dart';
 import 'package:bus_reservation_application/pages/search_result_page.dart';
 import 'package:bus_reservation_application/pages/seat_selection_page.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         routeNameBookingConfirmationPage: (context) =>
             const BookingConfirmationPage(),
         routeNameAddBusPage: (context) => const AddBusPage(),
+        routeNameAddRoutePage: (context) => const AddRoutePage(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

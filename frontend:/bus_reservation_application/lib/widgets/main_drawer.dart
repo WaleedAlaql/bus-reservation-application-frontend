@@ -26,6 +26,7 @@ class MainDrawer extends StatelessWidget {
             title: const Text('Add Route'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, routeNameAddRoutePage);
             },
           ),
           ListTile(
