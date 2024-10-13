@@ -1,3 +1,4 @@
+import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -17,6 +18,7 @@ class MainDrawer extends StatelessWidget {
             title: const Text('Add Bus'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, routeNameAddBusPage);
             },
           ),
           ListTile(
