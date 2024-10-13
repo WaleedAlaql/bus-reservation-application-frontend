@@ -1,5 +1,14 @@
 <h1 align="center">Bus Reservation Application </h1>
 <p align="center">
+  <a href="Java url">
+    <img alt="Java" src="https://img.shields.io/badge/Java-17-darkblue.svg" />
+  </a>
+  <a href="Maven url">
+    <img alt="Maven" src="https://img.shields.io/badge/Maven-4.0-brightgreen.svg" />
+  </a>
+  <a href="Spring Boot url">
+    <img alt="Spring Boot" src="https://img.shields.io/badge/Spring Boot-3.2.2-brightgreen.svg" />
+  </a>
   <a href="Dart url">
     <img alt="Dart" src="https://img.shields.io/badge/Dart-3.5.3-darkblue.svg" />
   </a>
