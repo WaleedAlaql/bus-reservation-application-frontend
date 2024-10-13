@@ -49,6 +49,7 @@ class MainDrawer extends StatelessWidget {
             title: const Text('Admin Login'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, routeNameLoginPage);
             },
           ),
         ],
