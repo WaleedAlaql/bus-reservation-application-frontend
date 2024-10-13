@@ -2,6 +2,7 @@ import 'package:bus_reservation_application/pages/add_bus_page.dart';
 import 'package:bus_reservation_application/pages/add_route_page.dart';
 import 'package:bus_reservation_application/pages/add_schedule_page.dart';
 import 'package:bus_reservation_application/pages/login_page.dart';
+import 'package:bus_reservation_application/pages/reservation_page.dart';
 import 'package:bus_reservation_application/pages/search_page.dart';
 import 'package:bus_reservation_application/pages/search_result_page.dart';
 import 'package:bus_reservation_application/pages/seat_selection_page.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         routeNameAddRoutePage: (context) => const AddRoutePage(),
         routeNameAddSchedulePage: (context) => const AddSchedulePage(),
         routeNameLoginPage: (context) => const LoginPage(),
+        routeNameReservationPage: (context) => const ReservationPage(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

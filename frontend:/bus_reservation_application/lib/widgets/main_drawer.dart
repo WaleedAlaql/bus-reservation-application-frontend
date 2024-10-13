@@ -42,6 +42,7 @@ class MainDrawer extends StatelessWidget {
             title: const Text('View Reservations'),
             onTap: () {
               Navigator.pop(context);
+              Navigator.pushNamed(context, routeNameReservationPage);
             },
           ),
           ListTile(
