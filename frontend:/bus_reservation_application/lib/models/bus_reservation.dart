@@ -25,4 +25,6 @@ class BusReservation {
   });
 
   get scheduleId => null;
+
+  get date => null;
 }
