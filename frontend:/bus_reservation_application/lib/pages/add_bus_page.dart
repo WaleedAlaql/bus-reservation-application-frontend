@@ -53,7 +53,7 @@ class _AddBusPageState extends State<AddBusPage> {
                   ),
                   items: busTypes
                       .map((e) =>
-                          DropdownMenuItem<String>(child: Text(e), value: e))
+                          DropdownMenuItem<String>(value: e, child: Text(e)))
                       .toList(),
                   onChanged: (value) {
                     setState(() {
@@ -72,7 +72,6 @@ class _AddBusPageState extends State<AddBusPage> {
                 decoration: const InputDecoration(
                   hintText: 'Enter bus name',
                   border: OutlineInputBorder(),
-                  filled: true,
                   prefixIcon: Icon(Icons.directions_bus),
                 ),
                 validator: (value) {
@@ -88,7 +87,6 @@ class _AddBusPageState extends State<AddBusPage> {
                 decoration: const InputDecoration(
                   hintText: 'Enter bus number',
                   border: OutlineInputBorder(),
-                  filled: true,
                   prefixIcon: Icon(Icons.numbers),
                 ),
                 validator: (value) {
@@ -104,7 +102,6 @@ class _AddBusPageState extends State<AddBusPage> {
                 decoration: const InputDecoration(
                   hintText: 'Enter bus seat',
                   border: OutlineInputBorder(),
-                  filled: true,
                   prefixIcon: Icon(Icons.chair_outlined),
                 ),
                 validator: (value) {

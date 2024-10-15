@@ -95,4 +95,8 @@ class AppDataProvider extends ChangeNotifier {
     _scheduleList = await _dataSource.getAllSchedules();
     notifyListeners();
   }
+
+  Future<ResponseModel> addSchedule(BusSchedule busSchedule) async {
+    return await _dataSource.addSchedule(busSchedule);
+  }
 }

@@ -86,7 +86,6 @@ class _AddRoutePageState extends State<AddRoutePage> {
                 hintText: 'Distance (in km)',
                 hintStyle: const TextStyle(color: Colors.white),
                 errorStyle: const TextStyle(color: Colors.white),
-                filled: true,
                 prefixIcon: const Icon(Icons.social_distance),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
