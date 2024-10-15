@@ -11,8 +11,14 @@ import 'package:bus_reservation_application/utils/constants.dart';
 
 class DummyDataSource extends DataSource {
   @override
-  Future<ResponseModel> addBus(Bus bus) {
-    throw UnimplementedError();
+  Future<ResponseModel> addBus(Bus bus) async {
+    TempDB.tableBus.add(bus);
+    return ResponseModel(
+      responseStatus: ResponseStatus.SAVED,
+      statusCode: 200,
+      message: 'Bus added successfully',
+      object: {},
+    );
   }
 
   @override
@@ -27,18 +33,30 @@ class DummyDataSource extends DataSource {
   }
 
   @override
-  Future<ResponseModel> addRoute(BusRoute busRoute) {
-    throw UnimplementedError();
+  Future<ResponseModel> addRoute(BusRoute busRoute) async {
+    TempDB.tableRoute.add(busRoute);
+    return ResponseModel(
+      responseStatus: ResponseStatus.SAVED,
+      statusCode: 200,
+      message: 'Route added successfully',
+      object: {},
+    );
   }
 
   @override
-  Future<ResponseModel> addSchedule(BusSchedule busSchedule) {
-    throw UnimplementedError();
+  Future<ResponseModel> addSchedule(BusSchedule busSchedule) async {
+    TempDB.tableSchedule.add(busSchedule);
+    return ResponseModel(
+      responseStatus: ResponseStatus.SAVED,
+      statusCode: 200,
+      message: 'Schedule added successfully',
+      object: {},
+    );
   }
 
   @override
-  Future<List<Bus>> getAllBus() {
-    throw UnimplementedError();
+  Future<List<Bus>> getAllBus() async {
+    return TempDB.tableBus;
   }
 
   @override
@@ -47,13 +65,13 @@ class DummyDataSource extends DataSource {
   }
 
   @override
-  Future<List<BusRoute>> getAllRoutes() {
-    throw UnimplementedError();
+  Future<List<BusRoute>> getAllRoutes() async {
+    return TempDB.tableRoute;
   }
 
   @override
-  Future<List<BusSchedule>> getAllSchedules() {
-    throw UnimplementedError();
+  Future<List<BusSchedule>> getAllSchedules() async {
+    return TempDB.tableSchedule;
   }
 
   @override

@@ -72,4 +72,27 @@ class AppDataProvider extends ChangeNotifier {
       );
     });
   }
+
+  Future<ResponseModel> addBus(Bus bus) async {
+    return await _dataSource.addBus(bus);
+  }
+
+  Future<ResponseModel> addRoute(BusRoute busRoute) async {
+    return await _dataSource.addRoute(busRoute);
+  }
+
+  void getAllBus() async {
+    _busList = await _dataSource.getAllBus();
+    notifyListeners();
+  }
+
+  void getAllRoute() async {
+    _routeList = await _dataSource.getAllRoutes();
+    notifyListeners();
+  }
+
+  void getAllSchedule() async {
+    _scheduleList = await _dataSource.getAllSchedules();
+    notifyListeners();
+  }
 }
