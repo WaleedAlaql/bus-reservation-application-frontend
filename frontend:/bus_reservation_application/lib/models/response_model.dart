@@ -1,15 +1,18 @@
 import '../utils/constants.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ResponseModel {
-  ResponseStatus responseStatus;
-  int statusCode;
-  String message;
-  Map<String, dynamic> object;
+part 'response_model.freezed.dart';
+part 'response_model.g.dart';
 
-  ResponseModel({
-    required this.responseStatus,
-    required this.statusCode,
-    required this.message,
-    required this.object,
-  });
+@unfreezed
+class ResponseModel with _$ResponseModel {
+  factory ResponseModel({
+    @Default(ResponseStatus.SAVED) ResponseStatus responseStatus,
+    @Default(200) int statusCode,
+    @Default('SAVED') String message,
+    @Default({}) Map<String, dynamic> object,
+  }) = _ResponseModel;
+
+  factory ResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$ResponseModelFromJson(json);
 }

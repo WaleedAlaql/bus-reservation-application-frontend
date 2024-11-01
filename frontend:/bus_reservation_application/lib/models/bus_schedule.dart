@@ -1,27 +1,22 @@
 import 'bus_model.dart';
 import 'but_route.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class BusSchedule {
-  int? scheduleId;
-  Bus bus;
-  BusRoute busRoute;
-  String departureTime;
-  int ticketPrice;
-  int discount;
-  int processingFee;
+part 'bus_schedule.freezed.dart';
+part 'bus_schedule.g.dart';
 
-  BusSchedule(
-      {this.scheduleId,
-      required this.bus,
-      required this.busRoute,
-      required this.departureTime,
-      required this.ticketPrice,
-      this.discount = 0,
-      this.processingFee = 50});
+@unfreezed
+class BusSchedule with _$BusSchedule {
+  factory BusSchedule({
+    int? scheduleId,
+    required Bus bus,
+    required BusRoute busRoute,
+    required String departureTime,
+    required int ticketPrice,
+    @Default(0) int discount,
+    @Default(15) int processingFee,
+  }) = _BusSchedule;
 
-  get routeName => null;
-
-  get id => scheduleId;
-
-  int get fee => processingFee;
+  factory BusSchedule.fromJson(Map<String, dynamic> json) =>
+      _$BusScheduleFromJson(json);
 }

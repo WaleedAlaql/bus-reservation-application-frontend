@@ -1,15 +1,16 @@
-class Bus {
-  int? busId;
-  String busName;
-  String busNumber;
-  String busType;
-  int totalSeat;
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'bus_model.freezed.dart';
+part 'bus_model.g.dart';
 
-  Bus({
-    this.busId,
-    required this.busName,
-    required this.busNumber,
-    required this.busType,
-    required this.totalSeat,
-  });
+@unfreezed
+class Bus with _$Bus {
+  factory Bus({
+    int? busId,
+    required String busName,
+    required String busNumber,
+    required String busType,
+    required int totalSeat,
+  }) = _Bus;
+
+  factory Bus.fromJson(Map<String, dynamic> json) => _$BusFromJson(json);
 }
