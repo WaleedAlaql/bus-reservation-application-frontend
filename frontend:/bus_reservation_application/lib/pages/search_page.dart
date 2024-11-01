@@ -38,6 +38,7 @@ class _SearchPageState extends State<SearchPage> {
           key: formKey,
           child: Center(
             child: ListView(
+              shrinkWrap: true,
               padding: const EdgeInsets.all(8),
               children: [
                 DropdownButtonFormField<String>(

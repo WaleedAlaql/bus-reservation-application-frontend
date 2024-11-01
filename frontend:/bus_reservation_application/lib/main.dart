@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         routeNameReservationPage: (context) => const ReservationPage(),
       },
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Bus Reservation Application',
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
         brightness: Brightness.dark,

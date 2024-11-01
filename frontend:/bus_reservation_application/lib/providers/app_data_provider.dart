@@ -1,11 +1,14 @@
+import 'package:bus_reservation_application/datasource/app_data_source.dart';
 import 'package:bus_reservation_application/datasource/data_source.dart';
-import 'package:bus_reservation_application/datasource/dummy_data_source.dart';
+import 'package:bus_reservation_application/models/app_user.dart';
+import 'package:bus_reservation_application/models/auth_response_model.dart';
 import 'package:bus_reservation_application/models/bus_model.dart';
 import 'package:bus_reservation_application/models/bus_reservation.dart';
 import 'package:bus_reservation_application/models/bus_schedule.dart';
 import 'package:bus_reservation_application/models/but_route.dart';
 import 'package:bus_reservation_application/models/reservation_expansion_item.dart';
 import 'package:bus_reservation_application/models/response_model.dart';
+import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AppDataProvider extends ChangeNotifier {
@@ -18,7 +21,16 @@ class AppDataProvider extends ChangeNotifier {
   List<BusRoute> get routeList => _routeList;
   List<BusReservation> get reservationList => _reservationList;
   List<BusSchedule> get scheduleList => _scheduleList;
-  final DataSource _dataSource = DummyDataSource();
+  final DataSource _dataSource = AppDataSource();
+
+  Future<AuthResponseModel?> login(AppUser user) async {
+    final authResponse = await _dataSource.login(user);
+    if (authResponse == null) return null;
+    await saveToken(authResponse.accessToken ?? '');
+    await saveLoginTime(authResponse.loginTime ?? 0);
+    await saveExpirationDuration(authResponse.expirationDuration ?? 0);
+    return authResponse;
+  }
 
   Future<BusRoute?> getRouteByCityFromAndCityTo(
       String cityFrom, String cityTo) async {
