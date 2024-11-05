@@ -1,5 +1,10 @@
+import 'package:bus_reservation_application/models/bus_model.dart';
+import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
+import 'package:bus_reservation_application/utils/helper_functions.dart';
+import 'package:bus_reservation_application/widgets/login_alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddBusPage extends StatefulWidget {
   const AddBusPage({super.key});
@@ -28,6 +33,34 @@ class _AddBusPageState extends State<AddBusPage> {
     busNumberController.clear();
     busSeatController.clear();
     busType = null;
+  }
+
+  void addBus() {
+    if (formKey.currentState!.validate()) {
+      final bus = Bus(
+        busName: busNameController.text,
+        busNumber: busNumberController.text,
+        busType: busType!,
+        totalSeat: int.parse(busSeatController.text),
+      );
+      Provider.of<AppDataProvider>(context, listen: false)
+          .addBus(bus)
+          .then((response) {
+        if (response.responseStatus == ResponseStatus.SAVED) {
+          showMessage(context, response.message);
+          resetFields();
+        } else if (response.responseStatus == ResponseStatus.EXPIRED ||
+            response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          showLoginAlertDialog(
+            context,
+            message: response.message,
+            callback: () {
+              Navigator.pushNamed(context, routeNameLoginPage);
+            },
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -116,12 +149,7 @@ class _AddBusPageState extends State<AddBusPage> {
                 child: SizedBox(
                   width: 150,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        resetFields();
-                      }
-                    },
+                    onPressed: addBus,
                     child: const Text('Add Bus'),
                   ),
                 ),

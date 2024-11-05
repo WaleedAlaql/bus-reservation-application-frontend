@@ -1,5 +1,10 @@
+import 'package:bus_reservation_application/models/but_route.dart';
+import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
+import 'package:bus_reservation_application/utils/helper_functions.dart';
+import 'package:bus_reservation_application/widgets/login_alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddRoutePage extends StatefulWidget {
   const AddRoutePage({super.key});
@@ -18,6 +23,38 @@ class _AddRoutePageState extends State<AddRoutePage> {
   void dispose() {
     distanceController.dispose();
     super.dispose();
+  }
+
+  void resetFields() {
+    distanceController.clear();
+  }
+
+  void addRoute() {
+    if (formKey.currentState!.validate()) {
+      final route = BusRoute(
+        routeName: '$from - $to',
+        cityFrom: from!,
+        cityTo: to!,
+        distanceInKm: double.parse(distanceController.text),
+      );
+      Provider.of<AppDataProvider>(context, listen: false)
+          .addRoute(route)
+          .then((response) {
+        if (response.responseStatus == ResponseStatus.SAVED) {
+          showMessage(context, response.message);
+          resetFields();
+        } else if (response.responseStatus == ResponseStatus.EXPIRED ||
+            response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          showLoginAlertDialog(
+            context,
+            message: response.message,
+            callback: () {
+              Navigator.pushNamed(context, routeNameLoginPage);
+            },
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -103,11 +140,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
               child: SizedBox(
                 width: 150,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                    }
-                  },
+                  onPressed: addRoute,
                   child: const Text('Add Route'),
                 ),
               ),

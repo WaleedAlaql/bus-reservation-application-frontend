@@ -37,8 +37,9 @@ class SeatPlanView extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       width: MediaQuery.of(context).size.width * 0.80,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade400,
@@ -49,7 +50,11 @@ class SeatPlanView extends StatelessWidget {
         children: [
           const Text(
             'Front',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const Divider(
             height: 2,
@@ -110,16 +115,17 @@ class _SeatState extends State<Seat> {
               widget.onSelect(isSelected);
             },
       child: Container(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(8),
         height: 50,
         width: 50,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: widget.isBooked
               ? seatBookedColor
               : isSelected
                   ? seatSelectedColor
                   : seatAvailableColor,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8),
           boxShadow: widget.isBooked
               ? null
               : [

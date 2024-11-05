@@ -1,4 +1,4 @@
-const String currency = '৳';
+const String currency = 'SR';
 const String busTypeNonAc = 'NON-AC';
 const String busTypeACEconomy = 'AC-ECONOMY';
 const String busTypeACBusiness = 'AC-BUSINESS';
@@ -39,6 +39,7 @@ enum ResponseStatus {
   AUTHORIZED,
   EXPIRED,
   NONE,
+  ERROR,
 }
 
 const busTypes = [busTypeACBusiness, busTypeACEconomy, busTypeNonAc];

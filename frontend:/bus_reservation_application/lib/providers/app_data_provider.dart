@@ -93,17 +93,17 @@ class AppDataProvider extends ChangeNotifier {
     return await _dataSource.addRoute(busRoute);
   }
 
-  void getAllBus() async {
+  Future<void> getAllBus() async {
     _busList = await _dataSource.getAllBus();
     notifyListeners();
   }
 
-  void getAllRoute() async {
+  Future<void> getAllRoute() async {
     _routeList = await _dataSource.getAllRoutes();
     notifyListeners();
   }
 
-  void getAllSchedule() async {
+  Future<void> getAllSchedule() async {
     _scheduleList = await _dataSource.getAllSchedules();
     notifyListeners();
   }

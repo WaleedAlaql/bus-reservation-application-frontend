@@ -151,11 +151,15 @@ class _SearchPageState extends State<SearchPage> {
     if (formKey.currentState!.validate()) {
       Provider.of<AppDataProvider>(context, listen: false)
           .getRouteByCityFromAndCityTo(fromCity!, toCity!)
-          .then((value) {
-        Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [
-          value,
-          formatDate(selectedDate!, ['dd', '-', 'MM', '-', 'yyyy'])
-        ]);
+          .then((route) {
+        if (route != null) {
+          Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [
+            route,
+            formatDate(selectedDate!, ['dd', '-', 'MM', '-', 'yyyy'])
+          ]);
+        } else {
+          showMessage(context, 'No route found');
+        }
       });
     }
   }

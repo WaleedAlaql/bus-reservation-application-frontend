@@ -5,7 +5,6 @@ import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/widgets/seat_plan_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../models/bus_model.dart';
 import '../models/but_route.dart';
 
@@ -29,8 +28,8 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is List && args.length >= 2) {
+    final args = ModalRoute.of(context)!.settings.arguments as List;
+    if (args.length >= 2) {
       busSchedule = args[0] as BusSchedule;
       date = args[1] as String;
     } else {
@@ -59,7 +58,8 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
   getData() async {
     final reservations =
         await Provider.of<AppDataProvider>(context, listen: false)
-            .getReservationsByScheduleAndDepartureDate(busSchedule.id, date);
+            .getReservationsByScheduleAndDepartureDate(
+                busSchedule.scheduleId!, date);
     setState(() {
       isDataLoading = false;
     });
@@ -69,12 +69,6 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
       seats.add(reservation.seatNumbers);
     }
     bookedSeatNumbers = seats.join(', ');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Remove the busSchedule and date initializations from here
   }
 
   void onSeatSelected(bool isSelected, String seatNumber) {
@@ -111,7 +105,10 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                           color: seatBookedColor,
                         ),
                         const SizedBox(width: 10),
-                        const Text('Booked'),
+                        const Text(
+                          'Booked',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ],
                     ),
                   ),
@@ -141,27 +138,27 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                   );
                 },
               ),
-              if (!isDataLoading)
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: SeatPlanView(
-                      totalSeats: totalSeatBooked,
-                      bookedSeatNumbers: bookedSeatNumbers,
-                      totalSeatBooked: totalSeatBooked,
-                      isBusinessClass:
-                          busSchedule.bus.busType == busTypeACBusiness,
-                      onSeatSelected: (isSelected, seatNumber) {
-                        if (isSelected) {
-                          selectedSeats.add(seatNumber);
-                        } else {
-                          selectedSeats.remove(seatNumber);
-                        }
-                        selectedSeatStringNotifier.value =
-                            selectedSeats.join(', ');
-                      },
-                    ),
+              // if (!isDataLoading)
+              Expanded(
+                child: SingleChildScrollView(
+                  child: SeatPlanView(
+                    totalSeats: busSchedule.bus.totalSeat,
+                    bookedSeatNumbers: bookedSeatNumbers,
+                    totalSeatBooked: totalSeatBooked,
+                    isBusinessClass:
+                        busSchedule.bus.busType == busTypeACBusiness,
+                    onSeatSelected: (value, seatNumber) {
+                      if (value) {
+                        selectedSeats.add(seatNumber);
+                      } else {
+                        selectedSeats.remove(seatNumber);
+                      }
+                      selectedSeatStringNotifier.value =
+                          selectedSeats.join(', ');
+                    },
                   ),
                 ),
+              ),
               OutlinedButton(
                 onPressed: () {
                   if (selectedSeats.isEmpty) {

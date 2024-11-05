@@ -301,6 +301,10 @@ class _$BusReservationImpl implements _BusReservation {
       this,
     );
   }
+
+  @override
+  // TODO: implement date
+  get date => throw UnimplementedError();
 }
 
 abstract class _BusReservation implements BusReservation {

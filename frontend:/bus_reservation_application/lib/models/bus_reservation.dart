@@ -21,4 +21,6 @@ class BusReservation with _$BusReservation {
 
   factory BusReservation.fromJson(Map<String, dynamic> json) =>
       _$BusReservationFromJson(json);
+
+  get date => null;
 }

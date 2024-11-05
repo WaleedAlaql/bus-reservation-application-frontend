@@ -19,4 +19,6 @@ class BusSchedule with _$BusSchedule {
 
   factory BusSchedule.fromJson(Map<String, dynamic> json) =>
       _$BusScheduleFromJson(json);
+
+  int get id => 0;
 }
