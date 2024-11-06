@@ -26,8 +26,10 @@ mixin _$BusReservation {
   set customer(Customer value) => throw _privateConstructorUsedError;
   BusSchedule get busSchedule => throw _privateConstructorUsedError;
   set busSchedule(BusSchedule value) => throw _privateConstructorUsedError;
-  int get timestamp => throw _privateConstructorUsedError;
-  set timestamp(int value) => throw _privateConstructorUsedError;
+  @BigIntConverter()
+  BigInt get timestamp => throw _privateConstructorUsedError;
+  @BigIntConverter()
+  set timestamp(BigInt value) => throw _privateConstructorUsedError;
   String get departureDate => throw _privateConstructorUsedError;
   set departureDate(String value) => throw _privateConstructorUsedError;
   int get totalSeatBooked => throw _privateConstructorUsedError;
@@ -59,7 +61,7 @@ abstract class $BusReservationCopyWith<$Res> {
       {int? reservationId,
       Customer customer,
       BusSchedule busSchedule,
-      int timestamp,
+      @BigIntConverter() BigInt timestamp,
       String departureDate,
       int totalSeatBooked,
       String seatNumbers,
@@ -111,7 +113,7 @@ class _$BusReservationCopyWithImpl<$Res, $Val extends BusReservation>
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       departureDate: null == departureDate
           ? _value.departureDate
           : departureDate // ignore: cast_nullable_to_non_nullable
@@ -168,7 +170,7 @@ abstract class _$$BusReservationImplCopyWith<$Res>
       {int? reservationId,
       Customer customer,
       BusSchedule busSchedule,
-      int timestamp,
+      @BigIntConverter() BigInt timestamp,
       String departureDate,
       int totalSeatBooked,
       String seatNumbers,
@@ -220,7 +222,7 @@ class __$$BusReservationImplCopyWithImpl<$Res>
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       departureDate: null == departureDate
           ? _value.departureDate
           : departureDate // ignore: cast_nullable_to_non_nullable
@@ -252,7 +254,7 @@ class _$BusReservationImpl implements _BusReservation {
       {this.reservationId,
       required this.customer,
       required this.busSchedule,
-      required this.timestamp,
+      @BigIntConverter() required this.timestamp,
       required this.departureDate,
       required this.totalSeatBooked,
       required this.seatNumbers,
@@ -269,7 +271,8 @@ class _$BusReservationImpl implements _BusReservation {
   @override
   BusSchedule busSchedule;
   @override
-  int timestamp;
+  @BigIntConverter()
+  BigInt timestamp;
   @override
   String departureDate;
   @override
@@ -301,10 +304,6 @@ class _$BusReservationImpl implements _BusReservation {
       this,
     );
   }
-
-  @override
-  // TODO: implement date
-  get date => throw UnimplementedError();
 }
 
 abstract class _BusReservation implements BusReservation {
@@ -312,7 +311,7 @@ abstract class _BusReservation implements BusReservation {
       {int? reservationId,
       required Customer customer,
       required BusSchedule busSchedule,
-      required int timestamp,
+      @BigIntConverter() required BigInt timestamp,
       required String departureDate,
       required int totalSeatBooked,
       required String seatNumbers,
@@ -332,8 +331,10 @@ abstract class _BusReservation implements BusReservation {
   BusSchedule get busSchedule;
   set busSchedule(BusSchedule value);
   @override
-  int get timestamp;
-  set timestamp(int value);
+  @BigIntConverter()
+  BigInt get timestamp;
+  @BigIntConverter()
+  set timestamp(BigInt value);
   @override
   String get departureDate;
   set departureDate(String value);

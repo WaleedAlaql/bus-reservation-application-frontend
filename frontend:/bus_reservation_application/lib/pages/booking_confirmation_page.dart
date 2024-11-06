@@ -5,8 +5,8 @@ import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../models/bus_schedule.dart';
+import 'dart:math' as math;
 
 class BookingConfirmationPage extends StatefulWidget {
   const BookingConfirmationPage({super.key});
@@ -28,24 +28,16 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
   bool isFirstTime = true;
 
   @override
-  void initState() {
-    super.initState();
-    nameController.text = 'waleed';
-    phoneNumberController.text = '03001234567';
-    emailController.text = 'waleed@gmail.com';
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isFirstTime) {
       final args = ModalRoute.of(context)!.settings.arguments as List;
-      date = args[0];
-      busSchedule = args[1];
+      busSchedule = args[0];
+      date = args[1];
       seatNumbers = args[2];
       totalSeatsBooked = args[3];
+      isFirstTime = false;
     }
-    isFirstTime = false;
   }
 
   @override
@@ -171,30 +163,42 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
                       'Email: ${emailController.text}',
                       style: const TextStyle(fontSize: 16),
                     ),
-                    const Text(
-                      'Route:',
-                      style: TextStyle(fontSize: 16),
+                    Text(
+                      'Route: ${busSchedule.busRoute.routeName}',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    const Text(
-                      'Date:',
-                      style: TextStyle(fontSize: 16),
+                    Text(
+                      'Departure Date: $date',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    const Text(
-                      'Ticket Price:',
-                      style: TextStyle(fontSize: 16),
+                    Text(
+                      'Departure Time: ${busSchedule.departureTime}',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    const Text(
-                      'Total Seats:',
-                      style: TextStyle(fontSize: 16),
+                    Text(
+                      'Ticket Price: ${busSchedule.ticketPrice}',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    const Text(
-                      'Seat Numbers:',
-                      style: TextStyle(fontSize: 16),
+                    Text(
+                      'Total Seats: $totalSeatsBooked',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      'Seat Numbers: $seatNumbers',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      'Discount: ${busSchedule.discount}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      'Processing Fee: ${busSchedule.processingFee}',
+                      style: const TextStyle(fontSize: 16),
                     ),
                     const Divider(thickness: 2),
-                    const Text(
-                      'Grand Total:',
-                      style: TextStyle(
+                    Text(
+                      'Grand Total: ${getGrandTotal(busSchedule.discount, totalSeatsBooked, busSchedule.ticketPrice, busSchedule.processingFee)}',
+                      style: const TextStyle(
                         fontSize: 20,
                       ),
                     ),
@@ -213,16 +217,18 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
 
   void confirmBooking() {
     if (formKey.currentState!.validate()) {
-      // Handle valid form
       final customer = Customer(
         customerName: nameController.text,
         mobile: phoneNumberController.text,
         email: emailController.text,
       );
+
       final reservation = BusReservation(
         customer: customer,
         busSchedule: busSchedule,
-        timestamp: DateTime.now().millisecondsSinceEpoch,
+        timestamp: BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000 +
+            busSchedule.scheduleId! * 1000000 +
+            math.Random().nextInt(999)),
         departureDate: date,
         totalSeatBooked: totalSeatsBooked,
         seatNumbers: seatNumbers,
@@ -241,13 +247,13 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
           showMessage(context, response.message);
           Navigator.popUntil(context, ModalRoute.withName(routeNameHome));
         } else {
-          showMessage(context, response.message);
+          showMessage(
+              context, 'Failed to save reservation: ${response.message}');
+          print(response.message);
         }
       }).catchError((error) {
-        showMessage(context, 'Something went wrong');
+        showMessage(context, 'JSON Parse Error: $error');
       });
-    } else {
-      // Handle invalid form
     }
   }
 }

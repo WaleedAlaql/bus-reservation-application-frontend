@@ -31,4 +31,5 @@ const _$ResponseStatusEnumMap = {
   ResponseStatus.AUTHORIZED: 'AUTHORIZED',
   ResponseStatus.EXPIRED: 'EXPIRED',
   ResponseStatus.NONE: 'NONE',
+  ResponseStatus.ERROR: 'ERROR',
 };

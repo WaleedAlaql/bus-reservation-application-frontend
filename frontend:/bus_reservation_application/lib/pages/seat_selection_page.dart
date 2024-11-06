@@ -5,8 +5,6 @@ import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/widgets/seat_plan_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/bus_model.dart';
-import '../models/but_route.dart';
 
 class SeatSelectionPage extends StatefulWidget {
   const SeatSelectionPage({super.key});
@@ -29,29 +27,9 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)!.settings.arguments as List;
-    if (args.length >= 2) {
-      busSchedule = args[0] as BusSchedule;
-      date = args[1] as String;
-    } else {
-      // Provide default values or handle the case when arguments are not provided
-      busSchedule = BusSchedule(
-        bus: Bus(
-          busName: 'Default Bus',
-          busNumber: 'Default-0001',
-          busType: busTypeACBusiness,
-          totalSeat: 40,
-        ),
-        busRoute: BusRoute(
-          routeName: 'Default Route',
-          cityFrom: 'Default City A',
-          cityTo: 'Default City B',
-          distanceInKm: 100,
-        ),
-        departureTime: '09:00',
-        ticketPrice: 100,
-      );
-      date = DateTime.now().toString();
-    }
+
+    busSchedule = args[0];
+    date = args[1];
     getData();
   }
 
@@ -173,8 +151,8 @@ class _SeatSelectionPageState extends State<SeatSelectionPage> {
                       arguments: [
                         busSchedule,
                         date,
-                        selectedSeats.length,
                         selectedSeatStringNotifier.value,
+                        selectedSeats.length,
                       ]);
                 },
                 child: const Text('Confirm'),

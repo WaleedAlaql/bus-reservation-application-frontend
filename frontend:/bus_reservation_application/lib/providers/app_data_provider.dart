@@ -70,9 +70,9 @@ class AppDataProvider extends ChangeNotifier {
       return ReservationExpansionItem(
         header: ReservationExpansionHeader(
           reservationId: reservation.reservationId,
-          date: reservation.date,
+          date: reservation.departureDate,
           busSchedule: reservation.busSchedule,
-          timestamp: reservation.timestamp,
+          timestamp: reservation.timestamp.toInt(),
           reservationStatus: reservation.reservationStatus,
         ),
         body: ReservationExpansionBody(

@@ -268,10 +268,6 @@ class _$BusScheduleImpl implements _BusSchedule {
       this,
     );
   }
-
-  @override
-  // TODO: implement id
-  int get id => throw UnimplementedError();
 }
 
 abstract class _BusSchedule implements BusSchedule {
