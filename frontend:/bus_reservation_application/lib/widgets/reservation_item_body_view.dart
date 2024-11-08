@@ -4,7 +4,7 @@ import '../models/reservation_expansion_item.dart';
 class ReservationItemBodyView extends StatelessWidget {
   const ReservationItemBodyView({super.key, required this.body});
 
-  final ReservationExpansionItem body;
+  final ReservationExpansionBody body;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,12 @@ class ReservationItemBodyView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Customer Name: ${body.body.customer.customerName}'),
-          Text('Customer Phone Number: ${body.body.customer.mobile}'),
-          Text('Customer Email: ${body.body.customer.email}'),
-          Text('Total Seat Booked: ${body.body.totalSeatedBooked}'),
-          Text('Seat Numbers: ${body.body.seatNumbers}'),
-          Text('Total Price: ${body.body.totalPrice}'),
+          Text('Customer Name: ${body.customer.customerName}'),
+          Text('Customer Phone Number: ${body.customer.mobile}'),
+          Text('Customer Email: ${body.customer.email}'),
+          Text('Total Seat Booked: ${body.totalSeatedBooked}'),
+          Text('Seat Numbers: ${body.seatNumbers}'),
+          Text('Total Price: ${body.totalPrice}'),
         ],
       ),
     );

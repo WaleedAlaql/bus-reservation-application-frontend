@@ -24,16 +24,24 @@ class SearchResultPage extends StatelessWidget {
             'Showing results for ${route.cityFrom} to ${route.cityTo} on $date',
             style: const TextStyle(fontSize: 20),
           ),
+          // Consumer listens to changes in AppDataProvider
+          // and rebuilds when the provider data changes
           Consumer<AppDataProvider>(
             builder: (context, appDataProvider, child) =>
+                // FutureBuilder handles the async state management
+                // for fetching bus schedules
                 FutureBuilder<List<BusSchedule>>(
+              // Async call to get schedules for the selected route
               future: appDataProvider.getSchedulesByRouteName(route.routeName),
               builder: (context, snapshot) {
+                // When data is successfully loaded
                 if (snapshot.hasData) {
                   final schedules = snapshot.data!;
+                  // Display schedules in a vertical column
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: schedules
+                        // Convert each schedule into a ScheduleItemView widget
                         .map((schedule) => ScheduleItemView(
                               schedule: schedule,
                               date: date,
@@ -41,9 +49,11 @@ class SearchResultPage extends StatelessWidget {
                         .toList(),
                   );
                 }
+                // Handle error state
                 if (snapshot.hasError) {
                   return const Text('Failed to fetch data');
                 }
+                // Show loading state while waiting for data
                 return const Text('Please wait...');
               },
             ),

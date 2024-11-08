@@ -18,6 +18,51 @@ class _SearchPageState extends State<SearchPage> {
   String? fromCity;
   String? toCity;
   DateTime? selectedDate;
+
+  void selectDate() {
+    // Show a date picker dialog to the user
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(), // Set the initial date to today
+      firstDate: DateTime.now(), // Set the earliest selectable date to today
+      lastDate: DateTime.now().add(const Duration(
+          days: 365)), // Set the latest selectable date to one year from today
+    ).then((value) {
+      // Once a date is selected, update the state with the selected date
+      setState(() {
+        selectedDate = value;
+      });
+    });
+  }
+
+  void search() {
+    // Check if a date has been selected
+    if (selectedDate == null) {
+      // Show an error message if no date is selected
+      showMessage(context, selectDateErrMessage);
+      return;
+    }
+    // Validate the form fields
+    if (formKey.currentState!.validate()) {
+      // Fetch the route based on the selected cities
+      Provider.of<AppDataProvider>(context, listen: false)
+          .getRouteByCityFromAndCityTo(fromCity!, toCity!)
+          .then((route) {
+        // If a route is found, navigate to the search result page
+        if (route != null) {
+          Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [
+            route,
+            // Pass the formatted selected date as an argument
+            formatDate(selectedDate!, ['dd', '-', 'MM', '-', 'yyyy'])
+          ]);
+        } else {
+          // Show an error message if no route is found
+          showMessage(context, 'No route found');
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,39 +173,5 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
         ));
-  }
-
-  void selectDate() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-    ).then((value) {
-      setState(() {
-        selectedDate = value;
-      });
-    });
-  }
-
-  void search() {
-    if (selectedDate == null) {
-      showMessage(context, selectDateErrMessage);
-      return;
-    }
-    if (formKey.currentState!.validate()) {
-      Provider.of<AppDataProvider>(context, listen: false)
-          .getRouteByCityFromAndCityTo(fromCity!, toCity!)
-          .then((route) {
-        if (route != null) {
-          Navigator.pushNamed(context, routeNameSearchResultPage, arguments: [
-            route,
-            formatDate(selectedDate!, ['dd', '-', 'MM', '-', 'yyyy'])
-          ]);
-        } else {
-          showMessage(context, 'No route found');
-        }
-      });
-    }
   }
 }

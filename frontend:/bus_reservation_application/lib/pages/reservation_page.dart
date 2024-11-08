@@ -19,29 +19,38 @@ class _ReservationPageState extends State<ReservationPage> {
   List<ReservationExpansionItem> items = [];
 
   @override
-  void initState() {
+  void didChangeDependencies() {
     if (isFirstTime) {
       getData();
-      isFirstTime = false;
     }
-    super.initState();
+    super.didChangeDependencies();
   }
 
   getData() async {
+    // Fetch all reservations from the AppDataProvider
     final data = await Provider.of<AppDataProvider>(context, listen: false)
         .getAllReservation();
+
+    // Convert the fetched data into a list of ReservationExpansionItem
     items = Provider.of<AppDataProvider>(context, listen: false)
         .getExpansionItem(data);
+
+    // Update the UI to reflect the new data
     setState(() {});
   }
 
   void search(String mobile) async {
+    // Fetch reservations by mobile number from the AppDataProvider
     final data = await Provider.of<AppDataProvider>(context, listen: false)
         .getReservationsByMobile(mobile);
+
+    // Check if no reservations were found
     if (data.isEmpty) {
+      // Display a message indicating no reservations were found
       showMessage(context, 'No reservations found');
       return;
     } else {
+      // Update the UI with the fetched reservations
       setState(() {
         items = Provider.of<AppDataProvider>(context, listen: false)
             .getExpansionItem(data);
@@ -59,21 +68,27 @@ class _ReservationPageState extends State<ReservationPage> {
         child: Column(
           children: [
             SearchBox(
-              onSearch: search,
+              onSubmit: search,
             ),
             ExpansionPanelList(
+              // Define a callback to handle panel expansion and collapse
               expansionCallback: (panelIndex, isExpanded) {
                 setState(() {
-                  items[panelIndex].isExpanded = !isExpanded;
+                  // Update the isExpanded property of the tapped panel
+                  items[panelIndex].isExpanded = isExpanded;
                 });
               },
+              // Map each item to an ExpansionPanel widget
               children: items
                   .map(
                     (item) => ExpansionPanel(
+                      // Set the expansion state of the panel
                       isExpanded: item.isExpanded,
+                      // Define the header of the panel using a custom widget
                       headerBuilder: (context, isExpanded) =>
-                          ReservationItemHeaderView(header: item),
-                      body: ReservationItemBodyView(body: item),
+                          ReservationItemHeaderView(header: item.header),
+                      // Define the body of the panel using a custom widget
+                      body: ReservationItemBodyView(body: item.body),
                     ),
                   )
                   .toList(),

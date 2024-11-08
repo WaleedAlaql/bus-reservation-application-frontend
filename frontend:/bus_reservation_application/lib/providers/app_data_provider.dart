@@ -23,6 +23,8 @@ class AppDataProvider extends ChangeNotifier {
   List<BusSchedule> get scheduleList => _scheduleList;
   final DataSource _dataSource = AppDataSource();
 
+  /// Authenticates user and saves authentication tokens locally
+  /// Returns AuthResponseModel if successful, null if failed
   Future<AuthResponseModel?> login(AppUser user) async {
     final authResponse = await _dataSource.login(user);
     if (authResponse == null) return null;
@@ -32,27 +34,35 @@ class AppDataProvider extends ChangeNotifier {
     return authResponse;
   }
 
+  /// Retrieves a bus route based on departure and arrival cities
+  /// Returns null if no matching route is found
   Future<BusRoute?> getRouteByCityFromAndCityTo(
       String cityFrom, String cityTo) async {
     return await _dataSource.getRouteByCityFromAndCityTo(cityFrom, cityTo);
   }
 
+  /// Fetches and updates schedule list for a specific route
+  /// Notifies listeners of the update
   Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async {
     _scheduleList = await _dataSource.getSchedulesByRouteName(routeName);
     notifyListeners();
     return _scheduleList;
   }
 
+  /// Retrieves all reservations for a specific schedule and date
   Future<List<BusReservation>> getReservationsByScheduleAndDepartureDate(
       int scheduleId, String departureDate) async {
     return await _dataSource.getReservationsByScheduleAndDepartureDate(
         scheduleId, departureDate);
   }
 
+  /// Creates a new reservation in the system
   Future<ResponseModel> addReservation(BusReservation reservation) async {
     return await _dataSource.addReservation(reservation);
   }
 
+  /// Fetches and updates the complete list of reservations
+  /// Notifies listeners of the update
   Future<List<BusReservation>> getAllReservation() async {
     _reservationList = await _dataSource.getAllReservation();
     notifyListeners();
@@ -61,28 +71,6 @@ class AppDataProvider extends ChangeNotifier {
 
   Future<List<BusReservation>> getReservationsByMobile(String mobile) async {
     return await _dataSource.getReservationsByMobile(mobile);
-  }
-
-  List<ReservationExpansionItem> getExpansionItem(
-      List<BusReservation> reservations) {
-    return List.generate(reservations.length, (index) {
-      final reservation = reservations[index];
-      return ReservationExpansionItem(
-        header: ReservationExpansionHeader(
-          reservationId: reservation.reservationId,
-          date: reservation.departureDate,
-          busSchedule: reservation.busSchedule,
-          timestamp: reservation.timestamp.toInt(),
-          reservationStatus: reservation.reservationStatus,
-        ),
-        body: ReservationExpansionBody(
-          customer: reservation.customer,
-          totalSeatedBooked: reservation.totalSeatBooked,
-          seatNumbers: reservation.seatNumbers,
-          totalPrice: reservation.totalPrice,
-        ),
-      );
-    });
   }
 
   Future<ResponseModel> addBus(Bus bus) async {
@@ -110,5 +98,31 @@ class AppDataProvider extends ChangeNotifier {
 
   Future<ResponseModel> addSchedule(BusSchedule busSchedule) async {
     return await _dataSource.addSchedule(busSchedule);
+  }
+
+  /// Converts a list of BusReservation objects into ReservationExpansionItem objects
+  /// Used for displaying reservations in an expandable list view
+  List<ReservationExpansionItem> getExpansionItem(
+      List<BusReservation> reservations) {
+    return List.generate(reservations.length, (index) {
+      final reservation = reservations[index];
+      return ReservationExpansionItem(
+        // Header contains basic reservation info like ID, date, and status
+        header: ReservationExpansionHeader(
+          reservationId: reservation.reservationId,
+          date: reservation.departureDate,
+          busSchedule: reservation.busSchedule,
+          timestamp: reservation.timestamp.toInt(),
+          reservationStatus: reservation.reservationStatus,
+        ),
+        // Body contains detailed info like customer details and seat information
+        body: ReservationExpansionBody(
+          customer: reservation.customer,
+          totalSeatedBooked: reservation.totalSeatBooked,
+          seatNumbers: reservation.seatNumbers,
+          totalPrice: reservation.totalPrice,
+        ),
+      );
+    });
   }
 }

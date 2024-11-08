@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
-  const SearchBox({super.key, required this.onSearch});
-
-  final Function(String) onSearch;
+  const SearchBox({super.key, required this.onSubmit});
+  final Function(String) onSubmit;
 
   @override
   State<SearchBox> createState() => _SearchBoxState();
@@ -11,6 +10,12 @@ class SearchBox extends StatefulWidget {
 
 class _SearchBoxState extends State<SearchBox> {
   final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +30,8 @@ class _SearchBoxState extends State<SearchBox> {
           border: OutlineInputBorder(),
         ),
         onSubmitted: (value) {
-          if (searchController.text.isEmpty) {
-            return;
-          }
-          widget.onSearch(searchController.text);
+          if (searchController.text.isEmpty) return;
+          widget.onSubmit(searchController.text);
         },
       ),
     );

@@ -4,7 +4,6 @@ import 'package:bus_reservation_application/models/but_route.dart';
 import 'package:bus_reservation_application/providers/app_data_provider.dart';
 import 'package:bus_reservation_application/utils/constants.dart';
 import 'package:bus_reservation_application/utils/helper_functions.dart';
-import 'package:bus_reservation_application/widgets/login_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -38,47 +37,81 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   }
 
   void addSchedule() async {
+    // Check if a bus is selected
+    if (bus == null) {
+      showMessage(context, 'Please select a bus');
+      return;
+    }
+    // Check if a route is selected
+    if (busRoute == null) {
+      showMessage(context, 'Please select a route');
+      return;
+    }
+    // Check if a departure time is selected
     if (selectedDateTime == null) {
       showMessage(context, 'Please select time');
       return;
     }
+    // Validate the form fields
     if (formKey.currentState!.validate()) {
-      final busSchedule = BusSchedule(
-        bus: bus!,
-        busRoute: busRoute!,
-        departureTime: DateFormat('HH:mm').format(selectedDateTime!),
-        ticketPrice: int.parse(priceController.text),
-        discount: int.parse(discountController.text),
-        processingFee: int.parse(processingFeeController.text),
-      );
-      Provider.of<AppDataProvider>(context, listen: false)
-          .addSchedule(busSchedule)
-          .then((response) {
+      try {
+        // Create a new BusSchedule object with the provided details
+        final busSchedule = BusSchedule(
+          bus: bus!,
+          busRoute: busRoute!,
+          departureTime: DateFormat('HH:mm').format(selectedDateTime!),
+          ticketPrice: int.parse(priceController.text),
+          discount: int.parse(
+              discountController.text.isEmpty ? "0" : discountController.text),
+          processingFee: int.parse(processingFeeController.text.isEmpty
+              ? "15"
+              : processingFeeController.text),
+        );
+
+        // Attempt to add the schedule using the AppDataProvider
+        final response =
+            await Provider.of<AppDataProvider>(context, listen: false)
+                .addSchedule(busSchedule);
+
+        // Check the response status
         if (response.responseStatus == ResponseStatus.SAVED) {
+          // Show success message and reset fields if saved
           showMessage(context, response.message);
           resetFields();
-        } else if (response.responseStatus == ResponseStatus.EXPIRED ||
-            response.responseStatus == ResponseStatus.UNAUTHORIZED) {
-          showLoginAlertDialog(
-            context,
-            message: response.message,
-            callback: () {
-              Navigator.pushNamed(context, routeNameLoginPage);
-            },
-          );
+        } else {
+          // Handle failure and show appropriate error message
+          String errorMessage = response.message;
+          if (errorMessage.contains('Duplicate entry')) {
+            errorMessage =
+                'A schedule already exists for this bus, route and time combination';
+          }
+          showMessage(context, 'Failed to add schedule: $errorMessage');
         }
-      });
+      } catch (error) {
+        // Handle exceptions and show error message
+        String errorMessage = error.toString();
+        if (errorMessage.contains('Duplicate entry')) {
+          errorMessage =
+              'A schedule already exists for this bus, route and time combination';
+        }
+        showMessage(context, 'Error adding schedule: $errorMessage');
+      }
     }
   }
 
   Future<void> selectTime() async {
+    // Get the current date and time
     final now = DateTime.now();
+
+    // Show a time picker dialog to the user, with the initial time set to the previously selected time or the current time
     final selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDateTime ?? now),
     );
 
+    // If the user selects a time, update the selectedDateTime with the chosen time
     if (selectedTime != null) {
+      // Create a new DateTime object with the current date and the selected time
       final selectedDateTime = DateTime(
         now.year,
         now.month,
@@ -87,16 +120,20 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
         selectedTime.minute,
       );
 
+      // Update the state with the new selectedDateTime
       setState(() {
         this.selectedDateTime = selectedDateTime;
       });
     }
   }
 
+  // This getter returns a formatted string representation of the selected time.
+  // If no time is selected, it returns a default message indicating that.
   String get formattedTime {
     return selectedDateTime == null
-        ? 'Time is not selected'
-        : DateFormat('h:mm a').format(selectedDateTime!);
+        ? 'Time is not selected' // Message shown when no time is selected
+        : DateFormat('h:mm a').format(
+            selectedDateTime!); // Formats the selected time as 'hour:minute AM/PM'
   }
 
   void resetFields() {

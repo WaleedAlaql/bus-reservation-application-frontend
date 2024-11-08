@@ -36,25 +36,33 @@ class _AddBusPageState extends State<AddBusPage> {
   }
 
   void addBus() {
+    // Check if the form is valid
     if (formKey.currentState!.validate()) {
+      // Create a new Bus object with the input data
       final bus = Bus(
         busName: busNameController.text,
         busNumber: busNumberController.text,
         busType: busType!,
         totalSeat: int.parse(busSeatController.text),
       );
+
+      // Add the bus using the AppDataProvider
       Provider.of<AppDataProvider>(context, listen: false)
           .addBus(bus)
           .then((response) {
+        // Check the response status
         if (response.responseStatus == ResponseStatus.SAVED) {
+          // Show a success message and reset the form fields
           showMessage(context, response.message);
           resetFields();
         } else if (response.responseStatus == ResponseStatus.EXPIRED ||
             response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          // Show a login alert dialog if the session is expired or unauthorized
           showLoginAlertDialog(
             context,
             message: response.message,
             callback: () {
+              // Navigate to the login page
               Navigator.pushNamed(context, routeNameLoginPage);
             },
           );

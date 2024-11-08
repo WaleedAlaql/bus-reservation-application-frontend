@@ -1,8 +1,7 @@
 import 'package:bus_reservation_application/models/app_user.dart';
 import 'package:bus_reservation_application/models/bus_reservation.dart';
-
-import '../models/auth_response_model.dart';
-import '../models/bus_model.dart';
+import 'package:bus_reservation_application/models/auth_response_model.dart';
+import 'package:bus_reservation_application/models/bus_model.dart';
 import '../models/bus_schedule.dart';
 import '../models/but_route.dart';
 import '../models/response_model.dart';

@@ -19,17 +19,29 @@ class SeatPlanView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate number of rows based on total seats and seating class
+    // Business class: 3 seats per row, Economy: 4 seats per row
     final numberOfRows =
         (isBusinessClass ? totalSeats / 3 : totalSeats / 4).toInt();
+
+    // Set number of columns based on seating class
     final numberOfColumns = isBusinessClass ? 3 : 4;
+
+    // Create 2D array to store seat labels (e.g. A1, A2, B1, B2, etc.)
     List<List<String>> seatArrangement = [];
+
+    // Generate seat labels for each row and column
     for (int i = 0; i < numberOfRows; i++) {
       List<String> column = [];
       for (int j = 0; j < numberOfColumns; j++) {
+        // Combine row letter (A,B,C...) with column number (1,2,3...)
         column.add('${seatLabelList[i]}${j + 1}');
       }
       seatArrangement.add(column);
     }
+
+    // Convert comma-separated booked seats string into a list
+    // Example: "A1,B3,C2" becomes ["A1", "B3", "C2"]
     final List<String> bookedSeatNumbersList =
         bookedSeatNumbers.isEmpty ? [] : bookedSeatNumbers.split(',');
     return Container(
@@ -61,11 +73,14 @@ class SeatPlanView extends StatelessWidget {
             color: Colors.black,
           ),
           Column(children: [
+            // Iterate through each row in the seat arrangement
             for (int i = 0; i < seatArrangement.length; i++)
               Row(mainAxisSize: MainAxisSize.min, children: [
+                // Iterate through each seat in the current row
                 for (int j = 0; j < seatArrangement[i].length; j++)
                   Row(
                     children: [
+                      // Create individual seat widget with its label and booking status
                       Seat(
                         label: seatArrangement[i][j],
                         isBooked: bookedSeatNumbersList
@@ -74,7 +89,10 @@ class SeatPlanView extends StatelessWidget {
                           onSeatSelected(isSelected, seatArrangement[i][j]);
                         },
                       ),
+                      // Add aisle spacing:
+                      // For business class: after first seat (j == 0)
                       if (isBusinessClass && j == 0) const SizedBox(width: 24),
+                      // For economy class: after second seat (j == 1)
                       if (!isBusinessClass && j == 1) const SizedBox(width: 24),
                     ],
                   )

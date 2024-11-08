@@ -30,25 +30,34 @@ class _AddRoutePageState extends State<AddRoutePage> {
   }
 
   void addRoute() {
+    // Check if the form is valid
     if (formKey.currentState!.validate()) {
+      // Create a new BusRoute object with the provided details
       final route = BusRoute(
-        routeName: '$from - $to',
-        cityFrom: from!,
-        cityTo: to!,
-        distanceInKm: double.parse(distanceController.text),
+        routeName: '$from - $to', // Set the route name as "from - to"
+        cityFrom: from!, // Set the starting city
+        cityTo: to!, // Set the destination city
+        distanceInKm:
+            double.parse(distanceController.text), // Parse and set the distance
       );
+
+      // Add the route using the AppDataProvider
       Provider.of<AppDataProvider>(context, listen: false)
           .addRoute(route)
           .then((response) {
+        // Check the response status
         if (response.responseStatus == ResponseStatus.SAVED) {
+          // If saved successfully, show a message and reset fields
           showMessage(context, response.message);
           resetFields();
         } else if (response.responseStatus == ResponseStatus.EXPIRED ||
             response.responseStatus == ResponseStatus.UNAUTHORIZED) {
+          // If the session is expired or unauthorized, show a login alert dialog
           showLoginAlertDialog(
             context,
             message: response.message,
             callback: () {
+              // Navigate to the login page on callback
               Navigator.pushNamed(context, routeNameLoginPage);
             },
           );

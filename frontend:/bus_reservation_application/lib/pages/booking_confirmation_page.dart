@@ -30,12 +30,16 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // Check if this is the first time the dependencies are being changed
     if (isFirstTime) {
+      // Retrieve the arguments passed to this route
       final args = ModalRoute.of(context)!.settings.arguments as List;
-      busSchedule = args[0];
-      date = args[1];
-      seatNumbers = args[2];
-      totalSeatsBooked = args[3];
+      // Assign the arguments to the respective variables
+      busSchedule = args[0]; // Bus schedule details
+      date = args[1]; // Selected departure date
+      seatNumbers = args[2]; // Booked seat numbers
+      totalSeatsBooked = args[3]; // Total number of seats booked
+      // Set the flag to false to prevent re-initialization
       isFirstTime = false;
     }
   }
@@ -46,6 +50,59 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
     nameController.dispose();
     phoneNumberController.dispose();
     emailController.dispose();
+  }
+
+  void confirmBooking() {
+    // Validate the form fields
+    if (formKey.currentState!.validate()) {
+      // Create a Customer object with the input data
+      final customer = Customer(
+        customerName: nameController.text,
+        mobile: phoneNumberController.text,
+        email: emailController.text,
+      );
+
+      // Create a BusReservation object with the necessary details
+      final reservation = BusReservation(
+        customer: customer,
+        busSchedule: busSchedule,
+        // Generate a unique timestamp for the reservation
+        timestamp: BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000 +
+            busSchedule.scheduleId! * 1000000 +
+            math.Random().nextInt(999)),
+        departureDate: date,
+        totalSeatBooked: totalSeatsBooked,
+        seatNumbers: seatNumbers,
+        reservationStatus: reservationActive,
+        // Calculate the total price using a helper function
+        totalPrice: getGrandTotal(
+          busSchedule.discount,
+          totalSeatsBooked,
+          busSchedule.ticketPrice,
+          busSchedule.processingFee,
+        ),
+      );
+
+      // Add the reservation to the app's data provider
+      Provider.of<AppDataProvider>(context, listen: false)
+          .addReservation(reservation)
+          .then((response) {
+        // Check if the reservation was saved successfully
+        if (response.responseStatus == ResponseStatus.SAVED) {
+          // Show a success message and navigate back to the home page
+          showMessage(context, response.message);
+          Navigator.popUntil(context, ModalRoute.withName(routeNameHome));
+        } else {
+          // Show an error message if saving failed
+          showMessage(
+              context, 'Failed to save reservation: ${response.message}');
+          print(response.message);
+        }
+      }).catchError((error) {
+        // Handle any errors that occur during the reservation process
+        showMessage(context, 'JSON Parse Error: $error');
+      });
+    }
   }
 
   @override
@@ -213,47 +270,5 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
         ),
       ),
     );
-  }
-
-  void confirmBooking() {
-    if (formKey.currentState!.validate()) {
-      final customer = Customer(
-        customerName: nameController.text,
-        mobile: phoneNumberController.text,
-        email: emailController.text,
-      );
-
-      final reservation = BusReservation(
-        customer: customer,
-        busSchedule: busSchedule,
-        timestamp: BigInt.from(DateTime.now().millisecondsSinceEpoch ~/ 1000 +
-            busSchedule.scheduleId! * 1000000 +
-            math.Random().nextInt(999)),
-        departureDate: date,
-        totalSeatBooked: totalSeatsBooked,
-        seatNumbers: seatNumbers,
-        reservationStatus: reservationActive,
-        totalPrice: getGrandTotal(
-          busSchedule.discount,
-          totalSeatsBooked,
-          busSchedule.ticketPrice,
-          busSchedule.processingFee,
-        ),
-      );
-      Provider.of<AppDataProvider>(context, listen: false)
-          .addReservation(reservation)
-          .then((response) {
-        if (response.responseStatus == ResponseStatus.SAVED) {
-          showMessage(context, response.message);
-          Navigator.popUntil(context, ModalRoute.withName(routeNameHome));
-        } else {
-          showMessage(
-              context, 'Failed to save reservation: ${response.message}');
-          print(response.message);
-        }
-      }).catchError((error) {
-        showMessage(context, 'JSON Parse Error: $error');
-      });
-    }
   }
 }

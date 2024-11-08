@@ -18,7 +18,7 @@ _$BusReservationImpl _$$BusReservationImplFromJson(Map<String, dynamic> json) =>
       customer: Customer.fromJson(json['customer'] as Map<String, dynamic>),
       busSchedule:
           BusSchedule.fromJson(json['busSchedule'] as Map<String, dynamic>),
-      timestamp: const BigIntConverter().fromJson(json['timestamp'] as String),
+      timestamp: const BigIntConverter().fromJson(json['timestamp']),
       departureDate: json['departureDate'] as String,
       totalSeatBooked: (json['totalSeatBooked'] as num).toInt(),
       seatNumbers: json['seatNumbers'] as String,

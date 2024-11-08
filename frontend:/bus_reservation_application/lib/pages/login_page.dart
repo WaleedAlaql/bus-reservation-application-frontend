@@ -25,22 +25,29 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
+    // Validate the form fields
     if (_formKey.currentState!.validate()) {
+      // Retrieve the username and password from the text controllers
       final username = _usernameController.text;
       final password = _passwordController.text;
+
+      // Attempt to log in using the AppDataProvider
       final response =
-          await Provider.of<AppDataProvider>(context, listen: false)
-              .login(AppUser(
-        userName: username,
-        password: password,
-      ));
+          await Provider.of<AppDataProvider>(context, listen: false).login(
+        AppUser(
+          userName: username,
+          password: password,
+          role: '',
+        ),
+      );
+
+      // Check if the login was successful
       if (response != null) {
-        // ignore: use_build_context_synchronously
+        // Show a success message and navigate back
         showMessage(context, response.message ?? '');
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
-        // ignore: use_build_context_synchronously
+        // Show an error message if login failed
         showMessage(context, 'Invalid username or password');
       }
     }

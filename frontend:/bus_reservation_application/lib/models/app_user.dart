@@ -1,52 +1,19 @@
-class AppUser {
-  int? id;
-  String userName;
-  String password;
-  String role;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  AppUser({
-    this.id,
-    required this.userName,
-    required this.password,
-    this.role = 'Admin',
-  });
+part 'app_user.freezed.dart';
+part 'app_user.g.dart';
 
-  /// Converts the AppUser instance to a JSON-compatible Map
-  ///
-  /// Returns a Map<String, dynamic> with the following structure:
-  /// {
-  ///   'id': int?,         // Unique identifier, nullable
-  ///   'userName': String, // User's username
-  ///   'password': String, // User's password
-  ///   'role': String,     // User's role (defaults to 'Admin')
-  /// }
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'userName': userName,
-      'password': password,
-      'role': role,
-    };
-  }
+@unfreezed
+class AppUser with _$AppUser {
+  // Factory constructor for creating a new AppUser instance
+  factory AppUser({
+    int? id, // Optional user ID
+    required String userName, // Required username for the user
+    required String password, // Required password for the user
+    required String role, // Required role of the user (e.g., admin, user)
+  }) = _AppUser;
 
-  /// Creates an AppUser instance from a JSON-compatible Map
-  ///
-  /// Parameters:
-  ///   json: Map<String, dynamic> with the following structure:
-  ///   {
-  ///     'id': int?,         // Unique identifier, nullable
-  ///     'userName': String, // User's username
-  ///     'password': String, // User's password
-  ///     'role': String,     // User's role (defaults to 'Admin')
-  ///   }
-  ///
-  /// Returns an AppUser instance populated with the JSON data
-  factory AppUser.fromJson(Map<String, dynamic> json) {
-    return AppUser(
-      id: json['id'],
-      userName: json['userName'],
-      password: json['password'],
-      role: json['role'],
-    );
-  }
+  // Factory constructor for creating an AppUser instance from a JSON map
+  factory AppUser.fromJson(Map<String, dynamic> json) =>
+      _$AppUserFromJson(json);
 }
